@@ -1,3 +1,6 @@
+#ifndef _CBWIFISETTING_H_
+#define _CBWIFISETTING_H_
+
 #include <MenuCallBack.h>
 #include "Header.h"
 #include <WiFi.h>
@@ -6,7 +9,7 @@
 #include "WebServer.h"
 #include <Preferences.h>
 
-class WiFiSetting : public MenuCallBack
+class CBWiFiSetting : public MenuCallBack
 {
 public:
   bool setup() {
@@ -20,7 +23,7 @@ public:
 
     preferences.begin("wifi-config");
 
-    M5.Lcd.setCursor(0,50);
+    M5.Lcd.setCursor(0,30);
     M5.Lcd.setTextFont(2);
     M5.Lcd.print("Starting Web Server...");
 
@@ -40,7 +43,7 @@ public:
     preferences.end();
   }
 
-  WiFiSetting()
+  CBWiFiSetting()
   : MenuCallBack()
   , apIP(192, 168, 4, 1)
   , apSSID("M5STACK_SETUP")
@@ -61,10 +64,12 @@ private:
   Preferences preferences;
 
   void startWebServer() {
+    String strAPIP = WiFi.softAPIP().toString();
     M5.Lcd.setTextFont(1);
     M5.Lcd.setTextSize(2);
     M5.Lcd.print("host : ");
-    M5.Lcd.println(WiFi.softAPIP());
+    M5.Lcd.println(strAPIP);
+    M5.Lcd.qrcode("http://" + strAPIP, 200, 80, 120, 2);
     webServer.onNotFound([this]() {
       String s = "<h1>Wi-Fi Settings</h1><p>Please enter your password by selecting the SSID.</p>"
                  "<form method=\"get\" action=\"setap\"><label>SSID: </label><select name=\"ssid\">"
@@ -112,15 +117,15 @@ private:
       ssidList += WiFi.SSID(i);
       ssidList += "</option>";
     }
+    M5.Lcd.setTextFont(1);
+    M5.Lcd.setTextSize(2);
+    M5.Lcd.print("  AP : ");
+    M5.Lcd.println(apSSID);
     delay(100);
     WiFi.softAPConfig(apIP, apIP, IPAddress(255, 255, 255, 0));
     WiFi.softAP(apSSID);
     WiFi.mode(WIFI_MODE_AP);
     startWebServer();
-    M5.Lcd.setTextFont(1);
-    M5.Lcd.setTextSize(2);
-    M5.Lcd.print("  AP : ");
-    M5.Lcd.println(apSSID);
   }
 
   String makePage(String title, String contents) {
@@ -169,3 +174,4 @@ private:
     return s;
   }
 };
+#endif
