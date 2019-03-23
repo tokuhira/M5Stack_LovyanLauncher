@@ -230,6 +230,7 @@ typedef std::vector<MenuItem*> vmi;
 void setup() {
   M5.begin();
   M5.Speaker.begin();
+
   Wire.begin();
 
 // for fire LED off
