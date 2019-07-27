@@ -61,7 +61,7 @@ void drawFrame() {
   M5.Lcd.setTextFont(0);
   M5.Lcd.setTextColor(0x8410,0);
   M5.Lcd.drawString("- LovyanLauncher -", 207, 191, 1);
-  M5.Lcd.drawString("@lovyan03    v0.1.7", 204, 201, 1);
+  M5.Lcd.drawString("@lovyan03    v0.1.8", 204, 201, 1);
   M5.Lcd.drawString("http://git.io/fhdJV", 204, 211, 1);
 }
 
@@ -311,13 +311,14 @@ void setup() {
 // for M5GO Bottom LED off
   pinMode(NEOPIXEL_pin, OUTPUT);
   setNeoPixelAll(0);
-
+/*
   if(digitalRead(BUTTON_A_PIN) == 0) {
      Serial.println("Will Load menu binary");
      updateFromFS(SD);
      ESP.restart();
   }
-
+//*/
+/*
   const esp_partition_t *running = esp_ota_get_running_partition();
   const esp_partition_t *nextupdate = esp_ota_get_next_update_partition(NULL);
   const char* menubinfilename PROGMEM {MENU_BIN} ;
@@ -353,6 +354,7 @@ void setup() {
       ESP.restart();
     }
   }
+//*/
   M5.Lcd.fillScreen(0);
 
   M5ButtonDrawer::width = 106;
@@ -367,10 +369,12 @@ void setup() {
   treeView.useCardKB      = true;
   treeView.useJoyStick    = true;
   treeView.usePLUSEncoder = true;
+  treeView.useFACESEncoder= true;
   osk.useFACES       = true;
   osk.useCardKB      = true;
-  osk.usePLUSEncoder = true;
   osk.useJoyStick    = true;
+  osk.usePLUSEncoder = true;
+  osk.useFACESEncoder= true;
 
   drawFrame();
 
